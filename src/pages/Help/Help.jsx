@@ -1,5 +1,7 @@
 import './Help.css'
 import { useState, useEffect } from 'react';
+import { getToken, clearToken } from '../../globalToken';
+
 function Help() {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTag, setSelectedTag] = useState([]);
@@ -13,7 +15,11 @@ function Help() {
     ];
 
     const fetchList = async () => {
-        const token = 'eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJjYXNJRCI6IjIwMjUwMDU1MDI4NyIsIm5hbWUiOiLnjovmgJ3nm4giLCJleHAiOjE3NzIwNzgyODB9.ro-MfYFcTW4-nISGhblg7q0d9097sp2xqoUbOUm1Wo8';
+        const token = getToken();
+        if (!token) {
+            alert('请先登录');
+            return;
+        }
 
         const params = new URLSearchParams();
         params.append('searchTerm', searchTerm || '');
@@ -38,7 +44,8 @@ function Help() {
         console.log(res)
         if (res.status === 401 || res.status === 403) {
             // token失效，清除并跳转登录
-            localStorage.removeItem('token');
+            clearToken();
+            alert('身份已过期，请重新登录');
             return;
         }
 

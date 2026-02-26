@@ -1,0 +1,4 @@
+.login-page form button,
+.signup-section button {
+    cursor: pointer;
+}

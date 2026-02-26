@@ -15,6 +15,10 @@ function Home() {
     const { data, isPending, error } = useGet('/api/home');
 
     useEffect(() => {
+        if (data) {
+
+            console.log('首页接口返回', data);
+        }
         if (data && data.data) {
             setTeachers(data.data.teacherTotal);
             setTargetTeachers(data.data.targetTeacherTotal);

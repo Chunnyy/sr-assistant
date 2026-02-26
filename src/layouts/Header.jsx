@@ -1,11 +1,12 @@
 import { NavLink, useNavigate } from "react-router"
 import Logo from "../components/Logo"
 import ImgText from "../components/ImgText"
+import { clearToken } from '../globalToken';
 import './Header.css'
 function Header() {
     const navigate = useNavigate();
     const handleLogout = () => {
-        localStorage.removeItem('token');
+        clearToken();
         navigate('/login');
     }
 

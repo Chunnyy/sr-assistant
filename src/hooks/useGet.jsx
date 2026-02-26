@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import { getToken } from '../globalToken';
 
 function useGet(url) {
     const [data, setData] = useState(null);
     const [isPending, setIsPending] = useState(true);
     const [error, setError] = useState(null);
-    const token = 'eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJjYXNJRCI6IjIwMjUwMDU1MDI4NyIsIm5hbWUiOiLnjovmgJ3nm4giLCJleHAiOjE3NzIxMDE4MjB9.lj9sQ0IHKq6v8WuA0u-bIMVJvQXW-OSgmWQQpdcP3I0'
+    // globally-shared token
+    const token = getToken();
 
     useEffect(() => {
         const fetchData = async () => {

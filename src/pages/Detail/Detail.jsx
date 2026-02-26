@@ -25,7 +25,7 @@ function Detail() {
         <>
             <div className="detail-page">
                 <div className="to-list">
-                    <ImgText imageUrl={'/assets/back.png'} text={'返回导师列表'} onclick={goToList} />
+                    <ImgText imageUrl={'/assets/back.png'} text={'返回导师列表'} onClick={goToList} />
                 </div>
 
                 <div className="teacher-section">

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router"
 import Logo from "../../components/Logo";
+import { setToken } from "../../globalToken";
 import './Login.css'
+import './auth-fix.css'
 function Login() {
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
@@ -15,6 +17,14 @@ function Login() {
     //不跳转登录
     const handleLogin = async (e) => {
         e.preventDefault();
+        if (userId.trim() && password.trim()) {
+            // 在真实应用中这里会向服务器发送凭证并获取 token
+            const fakeToken = 'demo-token-' + Date.now();
+            setToken(fakeToken);
+            alert('登录成功');
+        } else {
+            alert('登录失败：请填写学号和密码');
+        }
     }
 
     return (
@@ -37,7 +47,7 @@ function Login() {
                         </div>
                         <Link to='/signup'>还没有账号？去注册</Link>
                         <button type="submit">登录</button>
-                        <button onClick={handleSDULogin}>使用山大统一认证登录</button>
+                        <button type="button" onClick={handleSDULogin}>使用山大统一认证登录</button>
                     </form>
                 </div>
 

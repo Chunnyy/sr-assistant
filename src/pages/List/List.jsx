@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getToken, clearToken } from '../../globalToken';
 import './List.css'
 
 function List() {
@@ -17,7 +18,13 @@ function List() {
     ];
 
     const fetchList = async () => {
-        const token = 'eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJjYXNJRCI6IjIwMjUwMDU1MDI4NyIsIm5hbWUiOiLnjovmgJ3nm4giLCJleHAiOjE3NzIwMjI3ODV9.Y3InJO7m-g4tZA6Om7g-rciOpg78cB9NfqRU8tBNkag';
+        // use shared global token
+        const token = getToken();
+        if (!token) {
+            // no token, user is not logged in
+            alert('请先登录');
+            return;
+        }
 
         const params = new URLSearchParams();
         params.append('searchTerm', searchTerm || '');
@@ -41,7 +48,9 @@ function List() {
         });
         console.log(res)
         if (res.status === 401 || res.status === 403) {
-            localStorage.removeItem('token');
+            // token 无效或过期
+            clearToken();
+            alert('身份已过期，请重新登录');
             return;
         }
 

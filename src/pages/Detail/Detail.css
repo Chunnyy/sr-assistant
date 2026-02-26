@@ -52,6 +52,18 @@
 
 .to-list {
     width: 90%;
+    margin-bottom: 10px;
+}
+
+/* make back link look like a button */
+.to-list .img-text {
+    padding: 5px 10px;
+    background-color: #367BFCB8;
+    border-radius: 4px;
+    color: white;
+}
+.to-list .img-text:hover {
+    background-color: #245fcf;
 }
 
 .contact-section {
