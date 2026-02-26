@@ -1,0 +1,71 @@
+.detail-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.teacher-section {
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 13px;
+    width: 85%;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.teacher p {
+    color: #9B9B9B;
+}
+
+.status {
+    background-color: #6DF172;
+    color: white;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    align-self: start;
+    margin-top: 20px;
+}
+
+.intro-section,
+.achievement-section,
+.contact-section {
+    background-color: white;
+    border-radius: 13px;
+    width: 85%;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.intro-section p,
+.achievement-section p {
+    color: #403E3E;
+}
+
+.to-list {
+    width: 90%;
+}
+
+.contact-section {
+    background-color: #A8C6FF3D;
+}
+
+.contact-section h4 {
+    color: #1E4EA7;
+}
+
+.contact-section p {
+    color: #183262;
+}
+
+.contact-section span {
+    color: #403E3E;
+}
