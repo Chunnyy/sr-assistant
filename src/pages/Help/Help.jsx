@@ -5,6 +5,7 @@ import { getToken, clearToken } from '../../globalToken';
 function Help() {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTag, setSelectedTag] = useState([]);
+    const [selectedButton, setSelectedButton] = useState(null);  // 追踪当前选中的按钮
     const [current, setCurrent] = useState(1);
     const [size] = useState(10);
     const [total, setTotal] = useState(0);
@@ -21,53 +22,71 @@ function Help() {
             return;
         }
 
-        const params = new URLSearchParams();
-        params.append('searchTerm', searchTerm || '');
-        params.append('searchTag', JSON.stringify(
-            selectedTag.length > 0 && !selectedTag.includes('全部')
-                ? selectedTag
-                : []
-        ));
-        params.append('current', current.toString());
-        params.append('size', size.toString());
+        // 构造 URL，类似 List.jsx 的方式
+        let url = '/api/advice?';
 
-        console.log('请求参数:', params.toString());
+        // searchTag 参数（无等号表示空值）
+        url += 'searchTag';
 
-        const res = await fetch('/api/advice', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': `Bearer ${token}`
-            },
-            body: params
-        });
-        console.log(res)
-        if (res.status === 401 || res.status === 403) {
-            // token失效，清除并跳转登录
-            clearToken();
-            alert('身份已过期，请重新登录');
-            return;
+        // 分页参数
+        url += `&current=${current}&size=${size}`;
+
+        console.log('发送请求 URL:', url);
+
+        try {
+            // 使用与 Apifox 示例一致的请求头
+            const myHeaders = new Headers();
+            myHeaders.append('User-Agent', 'Apifox/1.0.0 (https://apifox.com)');
+            myHeaders.append('Content-Type', 'application/json');
+            myHeaders.append('Authorization', `Bearer ${token}`);
+            myHeaders.append('Accept', '*/*');
+            myHeaders.append('Connection', 'keep-alive');
+
+            const requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: '',  // 空字符串
+                redirect: 'follow'
+            };
+
+            const res = await fetch(url, requestOptions);
+            console.log(res);
+            if (res.status === 401 || res.status === 403) {
+                clearToken();
+                alert('身份已过期，请重新登录');
+                return;
+            }
+
+            if (!res.ok) {
+                const errText = await res.text();
+                console.error('advice error', res.status, errText);
+                return;
+            }
+
+            const data = await res.json();
+            console.log('收到回复:', data);
+            setAdvice(data.data.records || []);
+            setTotal(data.data.total || 0);
+            setCurrent(data.data.current || 1);
+        } catch (error) {
+            console.error('网络请求失败:', error);
         }
-
-        const data = await res.json();
-        console.log(data);
-
     };
 
     const handleTagClick = tag => {
         if (tag === '全部') {
-            setSelectedTag([])
+            setSelectedButton(null);
+        } else if (selectedButton === tag) {
+            setSelectedButton(null);
         } else {
-            setSelectedTag(prev =>
-                prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
-            );
+            setSelectedButton(tag);
         }
         setCurrent(1);
     }
 
     useEffect(() => {
         fetchList();
-    }, [current, selectedTag]);
+    }, [current, selectedButton]);
     return (
         <>
             <div className="help-page">
@@ -84,7 +103,22 @@ function Help() {
                     <p>资源分类</p>
                     <div className="tags">
                         {allTags.map(tag => (
-                            <span key={tag} onClick={() => handleTagClick(tag)}>{tag}</span>
+                            <button
+                                key={tag}
+                                onClick={() => handleTagClick(tag)}
+                                style={{
+                                    padding: '8px 16px',
+                                    margin: '4px',
+                                    border: '1px solid #ddd',
+                                    borderRadius: '4px',
+                                    backgroundColor: selectedButton === tag ? '#1890ff' : '#fff',
+                                    color: selectedButton === tag ? '#fff' : '#000',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s'
+                                }}
+                            >
+                                {tag}
+                            </button>
                         ))}
                     </div>
                 </div>

@@ -109,6 +109,13 @@ h4 {
     background-color: white;
     border-radius: 13px;
     border: solid 1px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.teacher-card button:hover {
+    background-color: #f0f0f0;
 }
 
 .teachers-section,

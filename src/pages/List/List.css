@@ -15,6 +15,34 @@
     margin-bottom: 10px;
 }
 
+.teacher-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    max-width: 1400px;
+}
+
+/* 大屏幕：最多3列 */
+@media (min-width: 1200px) {
+    .teacher-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* 中等屏幕：2列 */
+@media (min-width: 768px) and (max-width: 1199px) {
+    .teacher-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 小屏幕：1列 */
+@media (max-width: 767px) {
+    .teacher-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .search-header p {
     color: #9B9B9B;
     font-size: 15px;
@@ -60,4 +88,38 @@ input:focus {
     border: solid 1px #9B9B9B;
     padding-left: 10px;
     padding-right: 10px;
+}
+
+/* 导师卡片样式 */
+.list-page .teacher-card {
+    background-color: white;
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    height: fit-content;
+}
+
+.list-page .teacher-card h4 {
+    font-weight: 400;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.list-page .teacher-card p {
+    color: #45E14A;
+    margin: 5px 0;
+}
+
+.list-page .teacher-card button {
+    background-color: white;
+    border-radius: 13px;
+    border: solid 1px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.list-page .teacher-card button:hover {
+    background-color: #f0f0f0;
 }
