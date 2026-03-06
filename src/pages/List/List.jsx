@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { getToken, clearToken } from '../../globalToken';
 import ResearchTags from '../../components/ResearchTags';
+import TeacherIntro from "../Home/components/TeacherIntro";
 import './List.css'
 
 function List() {
@@ -67,17 +68,17 @@ function List() {
                     'Host': '114.215.255.190:8080', // 虽然浏览器可能会忽略，但加上以防万一
                     'Connection': 'keep-alive',
                     // 这是一个关键补丁：告诉浏览器我们真的不需要 Body 验证
-                    'Content-Length': '0' 
+                    'Content-Length': '0'
                 },
                 mode: 'cors',
                 // 关键点：强制 body 为空，或者用 null，或者用空字符串
                 // 这是模仿 Node.js 的默认行为，node-fetch 如果没有 body 就没有
-                body: undefined 
+                body: undefined
             });
 
             const result = await response.json();
             console.log('收到后端回复:', result);
-            
+
             // 更新 UI
             setTeachers(result.data.records || []);
             setTotal(result.data.total || 0);
@@ -140,13 +141,9 @@ function List() {
                 <div className="teacher-grid">
                     {
                         teachers.length > 0 ? (teachers.map(teacher => (
-                            <div className="teacher-card" key={teacher.id}>
-                                <h4>{teacher.name}</h4>
-                                <ResearchTags tags={teacher.tags} />
-                                <div className="achievement-part"></div>
-                                <p>★正在招生</p>
-                                <button onClick={() => navigate(`/detail/${String(teacher.id)}`)}>查看详情</button>
-                            </div>
+                            teacher && (
+                                <TeacherIntro key={teacher.id} id={teacher.id} name={teacher.name} tags={teacher.tags} photo={teacher.photo} demand={teacher.demand}></TeacherIntro>
+                            )
                         ))) : (
                             <p>暂无符合条件的导师</p>
                         )

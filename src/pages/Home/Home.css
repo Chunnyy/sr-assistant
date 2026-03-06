@@ -88,21 +88,30 @@ h3 {
 .teacher-card {
     background-color: white;
     border-radius: 13px;
-    display: flex;
-    flex-direction: column;
+    row-gap: 10px;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
     padding-left: 10px;
     padding-right: 10px;
     padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.intro-part {
+    display: flex;
+    gap: 10px;
 }
 
 h4 {
     font-weight: 400;
     margin-bottom: 10px;
     margin-top: 10px;
+    align-self: center;
 }
 
 .teacher-card p {
-    color: #45E14A;
+
+    margin: 0;
 }
 
 .teacher-card button {

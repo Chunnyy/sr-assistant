@@ -30,7 +30,15 @@ function Detail() {
 
                 <div className="teacher-section">
                     <div className="teacher">
-                        <h3>{teacher.name}</h3>
+                        <div className="intro-part">
+                            <img src={teacher.photo} alt="" style={{
+                                width: '70px',
+                                height: '70px',
+                                borderRadius: '50%',
+                                border: 'solid 1px grey'
+                            }} />
+                            <h4>{teacher.name}</h4>
+                        </div>
                         <p>
                             <ImgText imageUrl={'/assets/email.png'} text={teacher.email} />
                             <ImgText imageUrl={'/assets/location.png'} text={teacher.department} />
@@ -40,7 +48,7 @@ function Detail() {
                             <ResearchTags tags={teacher.tags} />
                         </div>
                     </div>
-                    <div className="status">正在招生</div>
+                    <div className="status" style={{ backgroundColor: teacher.demand ? '#45E14A' : '#FF3F3F' }}>{teacher.demand ? '正在招生' : '暂停招生'}</div>
                 </div>
 
                 <div className="intro-section">
@@ -53,13 +61,26 @@ function Detail() {
                     <p>{teacher.achievement}</p>
                 </div>
 
-                <div className="project-section"></div>
+                {
+                    teacher.requirment &&
+                    <div className="requirement-section">
+                        <h4>招生需求</h4>
+                        <p>{teacher.requirment}</p>
+                    </div>
+                }
+
 
                 <div className="contact-section">
                     <h4>联系导师</h4>
-                    <p>如果您对该导师的研究方向感兴趣，可以通过以下方式联系</p>
-                    <ImgText imageUrl={'/assets/email.png'} text={`邮箱：${teacher.email}`} />
-                    <ImgText imageUrl={'/assets/location.png'} text={`办公室：${teacher.department}`} />
+                    {
+                        (teacher.email || teacher.department) && <p>如果您对该导师的研究方向感兴趣，可以通过以下方式联系</p>
+                    }
+                    {
+                        teacher.email && <ImgText imageUrl={'/assets/email.png'} text={`邮箱：${teacher.email}`} />
+                    }
+                    {
+                        teacher.department && <ImgText imageUrl={'/assets/location.png'} text={`办公室：${teacher.department}`} />
+                    }
                     <p>建议：发送邮件时请附上个人简介和研究兴趣，说明您对导师研究方向的理解和期望。</p>
                 </div>
 

@@ -2,4 +2,11 @@ body {
   background-color: #F5F5F5;
   margin: 0;
   padding: 0;
+  height: 100%;
+}
+
+#root {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
 }

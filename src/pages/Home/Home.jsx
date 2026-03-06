@@ -54,7 +54,7 @@ function Home() {
                     <div className="teachers">
                         {teachersArr.slice(0, 3).map((teacher) => (
                             teacher && (
-                                <TeacherIntro key={teacher.id} id={teacher.id} name={teacher.name} tags={teacher.tags}></TeacherIntro>
+                                <TeacherIntro key={teacher.id} id={teacher.id} name={teacher.name} tags={teacher.tags} photo={teacher.photo} demand={teacher.demand}></TeacherIntro>
                             )
                         ))}
                     </div>
