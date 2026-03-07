@@ -197,7 +197,7 @@ function List() {
             <div className="list-page">
                 <div className="search-header">
                     <h2>导师列表</h2>
-                    <p>共{total}位导师，正在招生5位</p>
+                    <p>共{total}位导师，正在招生{total}位</p>
                 </div>
                 <div className="search-box">
                     <img src="/assets/search.png" alt="" />

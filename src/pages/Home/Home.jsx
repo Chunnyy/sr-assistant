@@ -49,16 +49,20 @@ function Home() {
                     <IntroduceItem title={"科研资源"} imageUrl={"assets/list.png"} num={"6+"} tip={"帮助文档和指南"}></IntroduceItem>
                 </div>
 
-                <div className="teachers-section">
-                    <h3>推荐导师</h3>
-                    <div className="teachers">
-                        {teachersArr.slice(0, 3).map((teacher) => (
-                            teacher && (
-                                <TeacherIntro key={teacher.id} id={teacher.id} name={teacher.name} tags={teacher.tags} photo={teacher.photo} demand={teacher.demand}></TeacherIntro>
-                            )
-                        ))}
+                {
+                    teachersArr.length > 0 &&
+                    <div className="teachers-section">
+                        <h3>推荐导师</h3>
+                        <div className="teachers">
+                            {teachersArr.slice(0, 3).map((teacher) => (
+                                teacher && (
+                                    <TeacherIntro key={teacher.id} id={teacher.id} name={teacher.name} tags={teacher.tags} photo={teacher.photo} demand={teacher.demand}></TeacherIntro>
+                                )
+                            ))}
+                        </div>
                     </div>
-                </div>
+                }
+
 
                 <div className="quick-start-section">
                     <h3>快捷入口</h3>
