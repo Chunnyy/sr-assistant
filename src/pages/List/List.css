@@ -76,10 +76,21 @@ input:focus {
 }
 
 .tag-filter {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
     column-gap: 10px;
     row-gap: 10px;
+}
+
+.tag-filter button {
+    width: 100%;
+}
+
+@media (max-width: 1200px) {
+    .tag-filter {
+        overflow-x: auto;
+        padding-bottom: 4px;
+    }
 }
 
 .tag-filter span {
@@ -122,4 +133,33 @@ input:focus {
 
 .list-page .teacher-card button:hover {
     background-color: #f0f0f0;
+}
+
+.list-pagination {
+    width: 90%;
+    margin: 8px 0 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.list-pagination button {
+    border: 1px solid #d9d9d9;
+    background: #fff;
+    color: #222;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.list-pagination button.active {
+    background: #1890ff;
+    border-color: #1890ff;
+    color: #fff;
+}
+
+.list-pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
 }

@@ -1,21 +1,34 @@
-import { NavLink, useNavigate } from "react-router"
+import { NavLink, useLocation, useNavigate } from "react-router"
 import Logo from "../components/Logo"
 import ImgText from "../components/ImgText"
-import { clearToken } from '../globalToken';
+import { clearToken, getToken } from '../globalToken';
 import './Header.css'
+
 function Header() {
     const navigate = useNavigate();
-    const handleLogout = () => {
-        clearToken();
+    const location = useLocation();
+    const isLoggedIn = !!getToken();
+    const isLoginPage = location.pathname === '/login';
+
+    const handleAuthClick = () => {
+        if (isLoggedIn) {
+            clearToken();
+        }
         navigate('/login');
-    }
+    };
 
     return (
         <>
             <div className="header-section">
                 <header>
                     <Logo />
-                    <ImgText imageUrl={'/assets/logout.png'} text={'退出登录'} onClick={handleLogout} />
+                    {!isLoginPage && (
+                        <ImgText
+                            imageUrl={isLoggedIn ? '/assets/logout.png' : '/assets/user.png'}
+                            text={isLoggedIn ? '退出登录' : '去登录'}
+                            onClick={handleAuthClick}
+                        />
+                    )}
                 </header>
                 <nav>
                     <NavLink to="/" className={({ isActive }) =>

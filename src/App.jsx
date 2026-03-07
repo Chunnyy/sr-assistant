@@ -7,7 +7,9 @@ import Footer from './layouts/Footer'
 import Signup from './pages/Login/Signup'
 import Detail from './pages/Detail/Detail'
 import List from './pages/List/List'
+import AllTags from './pages/List/AllTags'
 import Help from './pages/Help/Help'
+import HelpDetail from './pages/Help/HelpDetail'
 
 function App() {
 
@@ -20,7 +22,9 @@ function App() {
         <Route path='/signup' element={<Signup />}></Route>
         <Route path="/detail/:id" element={<Detail />} />
         <Route path='/list' element={<List />}></Route>
+        <Route path='/list/tags' element={<AllTags />}></Route>
         <Route path='/Help' element={<Help />}></Route>
+        <Route path='/Help/detail' element={<HelpDetail />}></Route>
       </Routes>
       <Footer></Footer>
 

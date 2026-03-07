@@ -6,32 +6,143 @@
     margin-bottom: 10px;
 }
 
+.search-header,
+.search-box,
 .tags-filter {
-    display: flex;
-    flex-direction: column;
     width: 90%;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.search-header h2 {
+    margin: 0;
+}
+
+.search-header p {
+    color: #9b9b9b;
+    font-size: 15px;
+    margin: 6px 0 0;
+}
+
+.search-box {
+    background-color: #e0e0e0b2;
+    color: #9b9b9b;
+    border-radius: 12px;
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
     column-gap: 10px;
-    row-gap: 10px;
+}
+
+.search-box img {
+    margin-left: 8px;
+}
+
+.search-box input {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 10px 10px 10px 0;
+    font-size: 14px;
+}
+
+.tags-filter {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    row-gap: 12px;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 18px 20px;
 }
 
 .tags-filter p {
-    margin-bottom: 0;
-    margin-top: 0;
+    margin: 0;
+    font-size: 30px;
+    font-weight: 600;
 }
 
 .tags {
     display: flex;
-    column-gap: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
-.tags-filter span {
-    background-color: white;
+.tags button {
+    border: 1px solid #dadada;
+    background-color: #fff;
+    color: #2b2b2b;
     border-radius: 8px;
-    border: solid 1px #9B9B9B;
-    padding-left: 10px;
-    padding-right: 10px;
+    font-size: 14px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tags button.active {
+    background-color: #000;
+    color: #fff;
+    border-color: #000;
+}
+
+.source-grid {
+    width: 90%;
+    margin-top: 14px;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.source-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 18px;
+    border: 1px solid #ececec;
+}
+
+.source-tag {
+    color: #5f6f87;
+    font-size: 13px;
+}
+
+.source-card h3 {
+    margin: 14px 0 10px;
+    font-size: 33px;
+    font-weight: 600;
+    color: #181818;
+}
+
+.source-card p {
+    margin: 0;
+    color: #6f6f6f;
+    line-height: 1.7;
+    font-size: 20px;
+}
+
+.detail-btn {
+    margin-top: 16px;
+    border: 1px solid #1f6feb;
+    background: #1f6feb;
+    color: #fff;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.detail-btn:hover {
+    background: #1356bd;
+    border-color: #1356bd;
+}
+
+.empty-text {
+    color: #6f6f6f;
+    margin: 10px 0;
+}
+
+@media (max-width: 900px) {
+    .source-grid {
+        grid-template-columns: 1fr;
+    }
 }

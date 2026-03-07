@@ -1,15 +1,16 @@
 import './Help.css'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getToken, clearToken } from '../../globalToken';
+import { useNavigate } from 'react-router';
 
 function Help() {
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedTag, setSelectedTag] = useState([]);
-    const [selectedButton, setSelectedButton] = useState(null);  // 追踪当前选中的按钮
+    const [selectedButton, setSelectedButton] = useState(null);
     const [current, setCurrent] = useState(1);
     const [size] = useState(10);
     const [total, setTotal] = useState(0);
     const [advice, setAdvice] = useState([]);
+    const navigate = useNavigate();
 
     const allTags = [
         '全部', '写作技巧', '项目申请', '研究方向', '学术交流', '工具资源', '培养计划'
@@ -22,11 +23,14 @@ function Help() {
             return;
         }
 
-        // 构造 URL，类似 List.jsx 的方式
+        // 构造 URL，保持和后端兼容的 query 参数格式
         let url = '/api/advice?';
 
-        // searchTag 参数（无等号表示空值）
-        url += 'searchTag';
+        if (selectedButton && selectedButton !== '全部') {
+            url += `searchTag=${encodeURIComponent(selectedButton)}`;
+        } else {
+            url += 'searchTag';
+        }
 
         // 分页参数
         url += `&current=${current}&size=${size}`;
@@ -65,9 +69,9 @@ function Help() {
 
             const data = await res.json();
             console.log('收到回复:', data);
-            setAdvice(data.data.records || []);
-            setTotal(data.data.total || 0);
-            setCurrent(data.data.current || 1);
+            setAdvice(data?.data?.records || []);
+            setTotal(data?.data?.total || 0);
+            setCurrent(data?.data?.current || 1);
         } catch (error) {
             console.error('网络请求失败:', error);
         }
@@ -84,15 +88,58 @@ function Help() {
         setCurrent(1);
     }
 
+    const normalizeAdvice = useMemo(() => {
+        const pick = (item, keys, fallback = '') => {
+            for (const key of keys) {
+                if (item?.[key] !== undefined && item?.[key] !== null && `${item[key]}`.trim() !== '') {
+                    return item[key];
+                }
+            }
+            return fallback;
+        };
+
+        return advice.map((item, index) => {
+            const tagValue = pick(item, ['tag', 'adviceTag', 'category', 'type'], '未分类');
+            return {
+                id: pick(item, ['id', 'adviceId', 'resourceId'], `advice-${index}`),
+                tag: Array.isArray(tagValue) ? tagValue.join(' / ') : `${tagValue}`,
+                title: pick(item, ['title', 'adviceTitle', 'name'], '未命名资源'),
+                content: pick(item, ['content', 'adviceContent', 'summary', 'description', 'intro'], '暂无简介')
+            };
+        });
+    }, [advice]);
+
+    const filteredAdvice = useMemo(() => {
+        const keyword = searchTerm.trim().toLowerCase();
+        if (!keyword) {
+            return normalizeAdvice;
+        }
+
+        return normalizeAdvice.filter((item) => {
+            return (
+                item.title.toLowerCase().includes(keyword) ||
+                item.content.toLowerCase().includes(keyword) ||
+                item.tag.toLowerCase().includes(keyword)
+            );
+        });
+    }, [normalizeAdvice, searchTerm]);
+
     useEffect(() => {
         fetchList();
     }, [current, selectedButton]);
+
+    const handleViewDetail = (item) => {
+        navigate('/Help/detail', {
+            state: { item }
+        });
+    };
+
     return (
         <>
             <div className="help-page">
                 <div className="search-header">
                     <h2>科研帮助资源</h2>
-                    <p>为本科生提供入门指导和实用资源</p>
+                    <p>共{total}条资源，支持分类筛选和关键词检索</p>
                 </div>
                 <div className="search-box">
                     <img src="/assets/search.png" alt="" />
@@ -105,17 +152,8 @@ function Help() {
                         {allTags.map(tag => (
                             <button
                                 key={tag}
+                                className={selectedButton === tag ? 'active' : ''}
                                 onClick={() => handleTagClick(tag)}
-                                style={{
-                                    padding: '8px 16px',
-                                    margin: '4px',
-                                    border: '1px solid #ddd',
-                                    borderRadius: '4px',
-                                    backgroundColor: selectedButton === tag ? '#1890ff' : '#fff',
-                                    color: selectedButton === tag ? '#fff' : '#000',
-                                    cursor: 'pointer',
-                                    transition: 'all 0.2s'
-                                }}
                             >
                                 {tag}
                             </button>
@@ -123,7 +161,24 @@ function Help() {
                     </div>
                 </div>
                 <div className="source-grid">
-
+                    {filteredAdvice.length > 0 ? (
+                        filteredAdvice.map((item) => (
+                            <article className="source-card" key={item.id}>
+                                <span className="source-tag">[{item.tag}]</span>
+                                <h3>{item.title}</h3>
+                                <p>{item.content}</p>
+                                <button
+                                    type="button"
+                                    className="detail-btn"
+                                    onClick={() => handleViewDetail(item)}
+                                >
+                                    查看详情
+                                </button>
+                            </article>
+                        ))
+                    ) : (
+                        <p className="empty-text">暂无符合条件的资源</p>
+                    )}
                 </div>
             </div>
         </>

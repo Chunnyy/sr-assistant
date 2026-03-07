@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import Logo from "../../components/Logo";
 import { setToken } from "../../globalToken";
 import './Login.css'
 import './auth-fix.css'
+
 function Login() {
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     // 直接跳转到山大统一认证
     const handleSDULogin = () => {
@@ -17,13 +19,61 @@ function Login() {
     //不跳转登录
     const handleLogin = async (e) => {
         e.preventDefault();
-        if (userId.trim() && password.trim()) {
-            // 在真实应用中这里会向服务器发送凭证并获取 token
-            const fakeToken = 'demo-token-' + Date.now();
-            setToken(fakeToken);
-            alert('登录成功');
-        } else {
+        if (!userId.trim() || !password.trim()) {
             alert('登录失败：请填写学号和密码');
+            return;
+        }
+
+        try {
+            const requestUrl = `/api/login/service?id=${encodeURIComponent(userId.trim())}&pwd=${encodeURIComponent(password.trim())}`;
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
+                    'Content-Type': 'application/json',
+                    'Accept': '*/*',
+                    'Host': '114.215.255.190:8080',
+                    'Connection': 'keep-alive'
+                },
+                body: '',
+                redirect: 'follow'
+            };
+
+            console.log('登录请求信息:', {
+                url: requestUrl,
+                method: requestOptions.method,
+                headers: requestOptions.headers,
+                body: requestOptions.body
+            });
+
+            const response = await fetch(requestUrl, requestOptions);
+
+            let result = null;
+            const rawText = await response.text();
+            try {
+                result = rawText ? JSON.parse(rawText) : null;
+            } catch {
+                result = rawText;
+            }
+
+            const tokenFromData = typeof result?.data === 'string' ? result.data.trim() : '';
+            const successByDataToken = response.ok && !!tokenFromData;
+
+            console.log('登录响应状态:', response.status);
+            console.log('登录响应结果:', result ?? rawText);
+
+            if (successByDataToken) {
+                setToken(tokenFromData);
+                alert('登录成功');
+                navigate('/', { replace: true });
+                return;
+            }
+
+            console.error('登录失败，后端返回:', result);
+            alert(result?.message || '登录失败：账号或密码错误');
+        } catch (error) {
+            console.error('登录请求异常:', error);
+            alert('登录失败：网络异常');
         }
     }
 
